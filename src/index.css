@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:opsz,wght@14..32,100..900&family=JetBrains+Mono:wght@100..800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-heading: "DM Serif Display", Georgia, serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-brand-dark: #1e3d3b;
+  --color-brand-light: #cce2e1;
+  --color-brand-accent: #478e8a;
+  
+  /* Override blue with brand accent for consistency if needed, 
+     but we'll use brand classes specifically */
+}
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  body {
+    font-family: var(--font-body);
+    font-weight: 400;
+  }
+
+  code, pre, .font-mono {
+    font-family: var(--font-mono);
+  }
+}
+
+/* Custom styles for the editor to feel like Flow */
+.tutorial-editor .cm-content {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.stats-number {
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
