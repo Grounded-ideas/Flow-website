@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, Menu, X, Monitor } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
+import flowLogo from '../../asset/Flow.svg';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -34,9 +35,7 @@ export default function Navbar() {
         {/* Logo */}
         <a href="#" className="flex items-center gap-3 text-xl font-bold text-white group">
           <img 
-            src="/asset/Flow.svg" 
-            alt="Flow Logo" 
-            className="w-8 h-8 rounded-2xl group-hover:scale-110 transition-transform" 
+            src={flowLogo}
             referrerPolicy="no-referrer"
           />
           <span className="font-heading tracking-tight">Flow</span>

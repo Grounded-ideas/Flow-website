@@ -1,5 +1,6 @@
 import React from 'react';
 import { Github, Twitter, Mail, Heart } from 'lucide-react';
+import flowLogo from '../../asset/Flow.svg';
 
 interface FooterProps {
   onPrivacyClick: () => void;
@@ -13,7 +14,7 @@ export default function Footer({ onPrivacyClick, onTermsClick }: FooterProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-16">
           <div className="space-y-6">
             <div className="flex items-center gap-2 text-2xl font-bold text-white font-heading">
-              <img src="/asset/Flow.svg" alt="Flow Logo" className="w-8 h-8 rounded-2xl" referrerPolicy="no-referrer" />
+              <img src={flowLogo} alt="Flow Logo" className="w-8 h-8 rounded-2xl" referrerPolicy="no-referrer" />
               Flow
             </div>
             <p className="text-zinc-500 leading-relaxed font-body">
