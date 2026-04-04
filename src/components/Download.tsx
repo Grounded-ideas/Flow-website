@@ -12,7 +12,6 @@ export default function Download() {
   };
 
   return (
-  return (
     <section id="download" className="py-24 bg-black overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative p-12 md:p-24 rounded-[48px] bg-zinc-900 border border-white/10 overflow-hidden text-center space-y-12">
