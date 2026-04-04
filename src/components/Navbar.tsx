@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Download, Menu, X, Monitor } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import flowLogo from '../../asset/Flow.svg';
+import ReactGA from 'react-ga4';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -13,6 +14,13 @@ export default function Navbar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleDownloadClick = () => {
+    ReactGA.event({
+      category: 'engagement',
+      action: 'Downloaded App',
+    });
+  };
 
   const navLinks = [
     { name: 'Features', href: '#features' },
@@ -58,7 +66,7 @@ export default function Navbar() {
 
         {/* CTA */}
         <div className="hidden md:flex items-center gap-4">
-          <button className="px-5 py-2.5 rounded-full bg-white text-black text-sm font-bold hover:bg-brand-light transition-all flex items-center gap-2 font-body">
+          <button onClick={handleDownloadClick} className="px-5 py-2.5 rounded-full bg-white text-black text-sm font-bold hover:bg-brand-light transition-all flex items-center gap-2 font-body">
             <Download className="w-4 h-4" />
             Download
           </button>
@@ -93,7 +101,7 @@ export default function Navbar() {
               </a>
             ))}
             <div className="h-px w-full bg-white/5" />
-            <button className="w-full px-6 py-4 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-500 transition-all flex items-center justify-center gap-2">
+            <button onClick={() => { handleDownloadClick(); setIsMobileMenuOpen(false); }} className="w-full px-6 py-4 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-500 transition-all flex items-center justify-center gap-2">
               <Download className="w-5 h-5" />
               Download for Windows
             </button>

@@ -1,8 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Download, ArrowRight, Monitor } from 'lucide-react';
+import ReactGA from 'react-ga4';
 
 export default function Hero() {
+  const handleTourClick = () => {
+    ReactGA.event({
+      category: 'engagement',
+      action: 'Clicked Tour',
+    });
+  };
+
+  return (
   return (
     <section className="relative pt-32 pb-24 overflow-hidden">
       {/* Background Grid */}
@@ -56,6 +65,7 @@ export default function Hero() {
             </button>
             <a 
               href="#tutorial"
+              onClick={handleTourClick}
               className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/5 border border-white/10 text-white font-bold hover:bg-white/10 transition-all flex items-center justify-center gap-2 group font-body"
             >
               Take the tour

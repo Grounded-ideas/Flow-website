@@ -1,8 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Download as DownloadIcon, Github, Terminal } from 'lucide-react';
+import ReactGA from 'react-ga4';
 
 export default function Download() {
+  const handleDownloadClick = () => {
+    ReactGA.event({
+      category: 'engagement',
+      action: 'Downloaded App',
+    });
+  };
+
+  return (
   return (
     <section id="download" className="py-24 bg-black overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -24,7 +33,7 @@ export default function Download() {
           </div>
 
           <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-6">
-            <button className="w-full sm:w-auto px-12 py-6 rounded-full bg-white text-black font-bold hover:bg-brand-light transition-all flex items-center justify-center gap-3 group shadow-2xl font-body">
+            <button onClick={handleDownloadClick} className="w-full sm:w-auto px-12 py-6 rounded-full bg-white text-black font-bold hover:bg-brand-light transition-all flex items-center justify-center gap-3 group shadow-2xl font-body">
               <DownloadIcon className="w-6 h-6 group-hover:translate-y-1 transition-transform" />
               Download Flow for Windows
             </button>
