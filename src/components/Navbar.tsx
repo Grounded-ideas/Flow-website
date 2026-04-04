@@ -36,6 +36,8 @@ export default function Navbar() {
         <a href="#" className="flex items-center gap-3 text-xl font-bold text-white group">
           <img 
             src={flowLogo}
+            alt="Flow Logo"
+            className="w-8 h-8 rounded-2xl group-hover:scale-110 transition-transform"
             referrerPolicy="no-referrer"
           />
           <span className="font-heading tracking-tight">Flow</span>
