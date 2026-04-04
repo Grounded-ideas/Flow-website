@@ -11,7 +11,7 @@ export default function Hero() {
     });
   };
 
-  return (
+
   return (
     <section className="relative pt-32 pb-24 overflow-hidden">
       {/* Background Grid */}
