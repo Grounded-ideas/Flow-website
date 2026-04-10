@@ -4,11 +4,26 @@ import { Download as DownloadIcon, Github, Terminal } from 'lucide-react';
 import ReactGA from 'react-ga4';
 
 export default function Download() {
+  // Direct download link for the MSI installer
+  const downloadLink = 'https://github.com/Grounded-ideas/Horyzen-Flow-download/releases/download/v0.1.2/Flow_0.1.2_x64_en-US.msi';
+  const githubRepoLink = 'https://github.com/Grounded-ideas/Horyzen-Flow-download';
+
   const handleDownloadClick = () => {
     ReactGA.event({
       category: 'engagement',
       action: 'Downloaded App',
+      label: 'Flow v0.1.2',
     });
+    // Open download in new tab to ensure GA fires
+    window.open(downloadLink, '_blank');
+  };
+
+  const handleGitHubClick = () => {
+    ReactGA.event({
+      category: 'engagement',
+      action: 'View GitHub',
+    });
+    window.open(githubRepoLink, '_blank');
   };
 
   return (
@@ -32,11 +47,17 @@ export default function Download() {
           </div>
 
           <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-6">
-            <button onClick={handleDownloadClick} className="w-full sm:w-auto px-12 py-6 rounded-full bg-white text-black font-bold hover:bg-brand-light transition-all flex items-center justify-center gap-3 group shadow-2xl font-body">
+            <button 
+              onClick={handleDownloadClick} 
+              className="w-full sm:w-auto px-12 py-6 rounded-full bg-white text-black font-bold hover:bg-brand-light transition-all flex items-center justify-center gap-3 group shadow-2xl font-body"
+            >
               <DownloadIcon className="w-6 h-6 group-hover:translate-y-1 transition-transform" />
               Download Flow for Windows
             </button>
-            <button className="w-full sm:w-auto px-12 py-6 rounded-full bg-white/5 border border-white/10 text-white font-bold hover:bg-white/10 transition-all flex items-center justify-center gap-3 group font-body">
+            <button 
+              onClick={handleGitHubClick}
+              className="w-full sm:w-auto px-12 py-6 rounded-full bg-white/5 border border-white/10 text-white font-bold hover:bg-white/10 transition-all flex items-center justify-center gap-3 group font-body"
+            >
               <Github className="w-6 h-6" />
               View on GitHub
             </button>
@@ -62,7 +83,7 @@ export default function Download() {
                 <Terminal className="w-4 h-4" />
                 Version
               </div>
-              <div className="text-sm text-white font-medium font-mono">v1.2.4 (Latest)</div>
+              <div className="text-sm text-white font-medium font-mono">v0.1.2</div>
             </div>
           </div>
         </div>
