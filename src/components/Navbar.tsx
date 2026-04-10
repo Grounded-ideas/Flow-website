@@ -9,6 +9,9 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Direct download link for the MSI installer
+  const downloadLink = 'https://github.com/Grounded-ideas/Horyzen-Flow-download/releases/download/v0.1.2/Flow_0.1.2_x64_en-US.msi';
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
@@ -19,7 +22,10 @@ export default function Navbar() {
     ReactGA.event({
       category: 'engagement',
       action: 'Downloaded App',
+      label: 'Flow v0.1.2 - Navbar',
     });
+    // Open download in new tab to ensure GA fires
+    window.open(downloadLink, '_blank');
   };
 
   const navLinks = [
