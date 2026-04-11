@@ -1,21 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Download as DownloadIcon, Github, Terminal } from 'lucide-react';
+import { Download as DownloadIcon, Github, Terminal, Shield } from 'lucide-react';
 import ReactGA from 'react-ga4';
 
 export default function Download() {
+  const [showWarning, setShowWarning] = useState(false);
+  
   // Direct download link for the MSI installer
   const downloadLink = 'https://github.com/Grounded-ideas/Horyzen-Flow-download/releases/download/v0.1.3/Flow_0.1.3_x64_en-US.msi';
   const githubRepoLink = 'https://github.com/Grounded-ideas/Horyzen-Flow-download';
 
   const handleDownloadClick = () => {
+    // Show warning popup first
+    setShowWarning(true);
+    
     ReactGA.event({
       category: 'engagement',
       action: 'Downloaded App',
-      label: 'Flow v0.1.2',
+      label: 'Flow v0.1.3',
     });
-    // Open download in new tab to ensure GA fires
+  };
+
+  const proceedWithDownload = () => {
+    setShowWarning(false);
     window.open(downloadLink, '_blank');
+  };
+
+  const cancelDownload = () => {
+    setShowWarning(false);
   };
 
   const handleGitHubClick = () => {
@@ -76,18 +88,63 @@ export default function Download() {
                 <DownloadIcon className="w-4 h-4" />
                 File Size
               </div>
-              <div className="text-sm text-white font-medium font-mono">~15MB Installer</div>
+              <div className="text-sm text-white font-medium font-mono">~5MB Installer</div>
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-center gap-2 text-zinc-500 font-bold uppercase tracking-widest text-xs font-mono">
                 <Terminal className="w-4 h-4" />
                 Version
               </div>
-              <div className="text-sm text-white font-medium font-mono">v0.1.2</div>
+              <div className="text-sm text-white font-medium font-mono">v0.1.3</div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Windows Security Warning Modal */}
+      {showWarning && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 backdrop-blur-sm">
+          <div className="max-w-md w-full mx-4 bg-zinc-900 border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+            <div className="p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center">
+                  <Shield className="w-6 h-6 text-yellow-500" />
+                </div>
+                <h3 className="text-xl font-bold text-white">Windows Protected Your PC</h3>
+              </div>
+              
+              <p className="text-zinc-400 mb-4 leading-relaxed">
+                Microsoft Defender SmartScreen prevented an unrecognized app from starting.
+                <br /><br />
+                <strong className="text-white">Flow is safe to run.</strong> This warning appears because the app is new.
+              </p>
+              
+              <div className="bg-zinc-800 rounded-lg p-4 mb-6">
+                <p className="text-sm text-zinc-300 font-mono">
+                  1. Click <span className="text-yellow-400">"More info"</span><br />
+                  2. Click <span className="text-yellow-400">"Run anyway"</span><br />
+                  3. Flow will install normally
+                </p>
+              </div>
+              
+              <div className="flex gap-3">
+                <button
+                  onClick={proceedWithDownload}
+                  className="flex-1 px-4 py-2 rounded-lg bg-white text-black font-bold hover:bg-zinc-200 transition-colors"
+                >
+                  I understand, download anyway
+                </button>
+                <button
+                  onClick={cancelDownload}
+                  className="px-4 py-2 rounded-lg bg-zinc-800 text-zinc-400 font-bold hover:bg-zinc-700 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
