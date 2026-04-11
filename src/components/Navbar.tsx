@@ -10,7 +10,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Direct download link for the MSI installer
-  const downloadLink = 'https://github.com/Grounded-ideas/Horyzen-Flow-download/releases/download/v0.1.2/Flow_0.1.2_x64_en-US.msi';
+  const downloadLink = 'https://github.com/Grounded-ideas/Horyzen-Flow-download/releases/download/v0.1.3/Flow_0.1.3_x64_en-US.msi';
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);

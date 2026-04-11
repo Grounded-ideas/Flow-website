@@ -5,7 +5,7 @@ import ReactGA from 'react-ga4';
 
 export default function Download() {
   // Direct download link for the MSI installer
-  const downloadLink = 'https://github.com/Grounded-ideas/Horyzen-Flow-download/releases/download/v0.1.2/Flow_0.1.2_x64_en-US.msi';
+  const downloadLink = 'https://github.com/Grounded-ideas/Horyzen-Flow-download/releases/download/v0.1.3/Flow_0.1.3_x64_en-US.msi';
   const githubRepoLink = 'https://github.com/Grounded-ideas/Horyzen-Flow-download';
 
   const handleDownloadClick = () => {
