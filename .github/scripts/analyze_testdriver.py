@@ -24,7 +24,8 @@ def main():
         print("Warning: TESTDRIVER_PAYLOAD is empty. Using fallback indicator.", file=sys.stderr)
         testdriver_payload = "No specific payload content provided."
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
+    # Using standard active Flash model endpoint (gemini-2.5-flash or gemini-1.5-flash)
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
     headers = {"Content-Type": "application/json"}
 
     body = {
@@ -67,6 +68,8 @@ def main():
 
             first_candidate = candidates[0]
             finish_reason = first_candidate.get("finishReason")
+
+            # Reject abnormal finish reasons
             if finish_reason and finish_reason not in ("STOP", "MAX_TOKENS"):
                 print(f"Error: Candidate generation finished with abnormal reason: {finish_reason}", file=sys.stderr)
                 sys.exit(1)
@@ -78,11 +81,17 @@ def main():
 
             analysis = parts[0]["text"]
 
+            # Clearly label truncated response if MAX_TOKENS was hit
+            truncation_warning = ""
+            if finish_reason == "MAX_TOKENS":
+                truncation_warning = "\n\n> ⚠️ **Notice:** This QA analysis exceeded max tokens and was truncated before completion."
+
             brief = (
                 f"### 🧠 Gemini QA Brain Analysis for @jules\n\n"
-                f"{analysis}\n\n"
+                f"{analysis}"
+                f"{truncation_warning}\n\n"
                 f"---\n"
-                f"*Automated QA briefing generated via TestDriver AI + Gemini 2.0 Flash*\n"
+                f"*Automated QA briefing generated via TestDriver AI + Gemini Flash*\n"
                 f"> ⚠️ **Security Advisory:** The above brief was compiled from external test logs. "
                 f"Verify all findings against current codebase before making code modifications."
             )
