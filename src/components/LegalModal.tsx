@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Shield, FileText, ExternalLink, Mail, CheckCircle2 } from 'lucide-react';
+import { X, ExternalLink, Mail, ShieldCheck } from 'lucide-react';
 
 export type LegalDocType = 'privacy' | 'terms';
 
@@ -21,7 +21,6 @@ interface DocumentData {
   subtitle: string;
   effectiveDate: string;
   badgeText: string;
-  icon: typeof Shield;
   sections: DocumentSection[];
 }
 
@@ -30,7 +29,6 @@ const PRIVACY_DATA: DocumentData = {
   subtitle: "How Horyzen & Flow safeguard your personal data and privacy.",
   effectiveDate: "January 4, 2026",
   badgeText: "Local-First Architecture",
-  icon: Shield,
   sections: [
     {
       number: "01",
@@ -114,7 +112,6 @@ const TERMS_DATA: DocumentData = {
   subtitle: "Terms and conditions governing the use of Horyzen platform & Flow.",
   effectiveDate: "January 4, 2026",
   badgeText: "Fair Usage Agreement",
-  icon: FileText,
   sections: [
     {
       number: "01",
@@ -216,8 +213,6 @@ export default function LegalModal({ isOpen, type, onClose }: LegalModalProps) {
 
   if (!data) return null;
 
-  const IconComponent = data.icon;
-
   return (
     <AnimatePresence>
       {isOpen && (
@@ -232,7 +227,7 @@ export default function LegalModal({ isOpen, type, onClose }: LegalModalProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
             onClick={onClose}
             className="fixed inset-0 bg-black/80 backdrop-blur-xl"
           />
@@ -240,118 +235,99 @@ export default function LegalModal({ isOpen, type, onClose }: LegalModalProps) {
           {/* Modal Container */}
           <motion.div
             ref={modalRef}
-            initial={{ opacity: 0, scale: 0.94, y: 20, filter: 'blur(10px)' }}
+            initial={{ opacity: 0, scale: 0.95, y: 16, filter: 'blur(8px)' }}
             animate={{ opacity: 1, scale: 1, y: 0, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, scale: 0.96, y: 12, filter: 'blur(6px)' }}
+            exit={{ opacity: 0, scale: 0.97, y: 8, filter: 'blur(4px)' }}
             transition={{
               type: "spring",
-              stiffness: 380,
-              damping: 32,
-              mass: 0.85
+              stiffness: 400,
+              damping: 34,
+              mass: 0.8
             }}
-            className="relative w-full max-w-3xl max-h-[85vh] flex flex-col bg-zinc-950/95 border border-white/10 rounded-2xl md:rounded-3xl shadow-[0_32px_64px_-12px_rgba(0,0,0,0.8)] overflow-hidden z-10"
+            className="relative w-full max-w-2xl max-h-[85vh] flex flex-col bg-zinc-950/95 border border-white/10 rounded-2xl shadow-[0_32px_64px_-12px_rgba(0,0,0,0.8)] overflow-hidden z-10"
           >
-            {/* Ambient Lighting Accent Gradient at top rim */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-gradient-to-b from-brand-accent/15 via-brand-accent/5 to-transparent blur-2xl pointer-events-none" />
+            {/* Subtle top rim specular highlight */}
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
 
-            {/* Sticky Header Bar */}
-            <div className="sticky top-0 z-20 flex items-center justify-between px-6 py-5 md:px-8 border-b border-white/10 bg-zinc-950/80 backdrop-blur-md">
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-brand-accent">
-                  <IconComponent className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2.5">
-                    <h2 id="legal-modal-title" className="text-xl font-bold text-white tracking-tight font-heading">
-                      {data.title}
-                    </h2>
-                    <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono tracking-wider bg-brand-accent/10 border border-brand-accent/20 text-brand-light">
-                      <CheckCircle2 className="w-3 h-3 text-brand-accent" />
-                      {data.badgeText}
-                    </span>
-                  </div>
-                  <p className="text-xs text-zinc-400 font-body hidden sm:block mt-0.5">
-                    Effective Date: <span className="font-mono text-zinc-300">{data.effectiveDate}</span>
-                  </p>
-                </div>
-              </div>
+            {/* Ultra-Clean Minimalist Sticky Header Bar */}
+            <div className="sticky top-0 z-20 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-zinc-950/90 backdrop-blur-md">
+              <h2 id="legal-modal-title" className="text-base font-medium text-white tracking-tight font-sans">
+                {data.title}
+              </h2>
 
               <button
                 onClick={onClose}
                 aria-label="Close modal"
-                className="p-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-white/10 border border-transparent hover:border-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-accent/50"
+                className="group flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-accent/50"
               >
-                <X className="w-5 h-5" />
+                <span>Esc</span>
+                <X className="w-3.5 h-3.5 text-zinc-400 group-hover:text-white transition-colors" />
               </button>
             </div>
 
             {/* Scrollable Document Content */}
-            <div className="flex-1 overflow-y-auto px-6 py-6 md:px-10 md:py-8 space-y-8 divide-y divide-white/5 scrollbar-thin scrollbar-thumb-zinc-800 hover:scrollbar-thumb-zinc-700">
+            <div className="flex-1 overflow-y-auto px-6 py-6 md:px-8 md:py-8 space-y-8 scrollbar-thin scrollbar-thumb-zinc-800 hover:scrollbar-thumb-zinc-700">
 
-              {/* Mobile metadata badge line */}
-              <div className="sm:hidden flex flex-wrap items-center justify-between gap-2 pb-4">
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-brand-accent/10 border border-brand-accent/20 text-brand-light">
-                  <CheckCircle2 className="w-3 h-3 text-brand-accent" />
-                  {data.badgeText}
-                </span>
-                <p className="text-xs text-zinc-400 font-body">
-                  Effective: <span className="font-mono text-zinc-300">{data.effectiveDate}</span>
-                </p>
-              </div>
+              {/* Clean Uncluttered Document Metadata Header */}
+              <div className="space-y-3 pb-6 border-b border-white/5">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono bg-brand-accent/10 border border-brand-accent/20 text-brand-light">
+                    <ShieldCheck className="w-3.5 h-3.5 text-brand-accent" />
+                    {data.badgeText}
+                  </span>
+                  <p className="text-xs font-mono text-zinc-500">
+                    Effective: <span className="text-zinc-300">{data.effectiveDate}</span>
+                  </p>
+                </div>
 
-              {/* Subtitle intro banner */}
-              <div className="pt-2">
-                <p className="text-sm md:text-base text-zinc-300 leading-relaxed font-body bg-white/[0.02] border border-white/5 rounded-xl p-4">
+                <p className="text-sm text-zinc-400 leading-relaxed font-body">
                   {data.subtitle}
                 </p>
               </div>
 
-              {/* Document Sections Mapping */}
-              {data.sections.map((section, idx) => (
-                <div key={idx} className="pt-6 first:pt-0 space-y-3">
-                  <div className="flex items-center gap-3">
-                    <span className="font-mono text-xs text-brand-accent font-semibold px-2 py-0.5 rounded bg-brand-accent/10 border border-brand-accent/20">
-                      {section.number}
-                    </span>
-                    <h3 className="text-base font-semibold text-zinc-100 tracking-tight font-body">
-                      {section.title}
-                    </h3>
-                  </div>
+              {/* Document Sections */}
+              <div className="space-y-8 divide-y divide-white/5">
+                {data.sections.map((section, idx) => (
+                  <div key={idx} className="pt-6 first:pt-0 space-y-3">
+                    <div className="flex items-center gap-2.5">
+                      <span className="font-mono text-[11px] text-brand-accent font-semibold px-2 py-0.5 rounded bg-brand-accent/10 border border-brand-accent/20">
+                        {section.number}
+                      </span>
+                      <h3 className="text-sm font-semibold text-zinc-100 tracking-tight font-body">
+                        {section.title}
+                      </h3>
+                    </div>
 
-                  <div className="pl-0 md:pl-9 space-y-2.5 text-sm text-zinc-400 leading-relaxed font-body">
-                    {section.content.map((paragraph, pIdx) => (
-                      <p key={pIdx} className={paragraph.startsWith('•') ? 'pl-2 text-zinc-300' : ''}>
-                        {paragraph}
-                      </p>
-                    ))}
+                    <div className="pl-0 md:pl-8 space-y-2 text-xs md:text-sm text-zinc-400 leading-relaxed font-body">
+                      {section.content.map((paragraph, pIdx) => (
+                        <p key={pIdx} className={paragraph.startsWith('•') ? 'pl-2 text-zinc-300' : ''}>
+                          {paragraph}
+                        </p>
+                      ))}
 
-                    {/* Interactive contact callout on section 09 */}
-                    {section.number === '09' && (
-                      <div className="mt-4 pt-3 flex items-center gap-3">
-                        <a
-                          href="mailto:horyzen.app@gmail.com"
-                          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-brand-accent/10 border border-white/10 hover:border-brand-accent/30 text-zinc-200 hover:text-brand-light text-xs font-mono transition-all duration-200 group"
-                        >
-                          <Mail className="w-4 h-4 text-brand-accent group-hover:scale-110 transition-transform" />
-                          <span>horyzen.app@gmail.com</span>
-                          <ExternalLink className="w-3 h-3 text-zinc-500 group-hover:text-brand-accent transition-colors ml-1" />
-                        </a>
-                      </div>
-                    )}
+                      {/* Interactive contact callout on section 09 */}
+                      {section.number === '09' && (
+                        <div className="mt-4 pt-2">
+                          <a
+                            href="mailto:horyzen.app@gmail.com"
+                            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-brand-accent/10 border border-white/10 hover:border-brand-accent/30 text-zinc-200 hover:text-brand-light text-xs font-mono transition-all duration-200 group"
+                          >
+                            <Mail className="w-3.5 h-3.5 text-brand-accent group-hover:scale-110 transition-transform" />
+                            <span>horyzen.app@gmail.com</span>
+                            <ExternalLink className="w-3 h-3 text-zinc-500 group-hover:text-brand-accent transition-colors ml-1" />
+                          </a>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
-            {/* Sticky Bottom Control / Status Bar */}
-            <div className="px-6 py-4 md:px-8 border-t border-white/10 bg-zinc-950/80 backdrop-blur-md flex items-center justify-between font-mono text-xs text-zinc-500">
+            {/* Minimalist Bottom Bar */}
+            <div className="px-6 py-3 md:px-8 border-t border-white/10 bg-zinc-950/90 backdrop-blur-md flex items-center justify-between font-mono text-[11px] text-zinc-500">
               <span>Horyzen Flow Governance</span>
-              <button
-                onClick={onClose}
-                className="px-4 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-white text-xs font-sans font-medium transition-colors"
-              >
-                Close Document
-              </button>
+              <span>Updated 2026</span>
             </div>
           </motion.div>
         </div>
