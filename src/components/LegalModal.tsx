@@ -251,16 +251,16 @@ export default function LegalModal({ isOpen, type, onClose }: LegalModalProps) {
 
             {/* Ultra-Clean Minimalist Sticky Header Bar */}
             <div className="sticky top-0 z-20 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-zinc-950/90 backdrop-blur-md">
-              <h2 id="legal-modal-title" className="text-base font-medium text-white tracking-tight font-sans">
+              <h2 id="legal-modal-title" className="text-base font-semibold text-white tracking-tight font-body">
                 {data.title}
               </h2>
 
               <button
                 onClick={onClose}
                 aria-label="Close modal"
-                className="group flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-accent/50"
+                className="group flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-accent/50 cursor-pointer"
               >
-                <span>Esc</span>
+                <span className="text-[10px] uppercase tracking-wider text-zinc-500 group-hover:text-zinc-300 transition-colors">Esc</span>
                 <X className="w-3.5 h-3.5 text-zinc-400 group-hover:text-white transition-colors" />
               </button>
             </div>
@@ -290,7 +290,7 @@ export default function LegalModal({ isOpen, type, onClose }: LegalModalProps) {
                 {data.sections.map((section, idx) => (
                   <div key={idx} className="pt-6 first:pt-0 space-y-3">
                     <div className="flex items-center gap-2.5">
-                      <span className="font-mono text-[11px] text-brand-accent font-semibold px-2 py-0.5 rounded bg-brand-accent/10 border border-brand-accent/20">
+                      <span className="font-mono text-[10px] text-brand-accent font-medium px-2 py-0.5 rounded bg-brand-accent/10 border border-brand-accent/20 select-none">
                         {section.number}
                       </span>
                       <h3 className="text-sm font-semibold text-zinc-100 tracking-tight font-body">
