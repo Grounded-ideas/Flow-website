@@ -290,31 +290,45 @@ export default function LegalModal({ isOpen, type, onClose }: LegalModalProps) {
                 {data.sections.map((section, idx) => (
                   <div key={idx} className="pt-6 first:pt-0 space-y-3">
                     <div className="flex items-center gap-2.5">
-                      <span className="font-mono text-[11px] text-brand-accent font-semibold px-2 py-0.5 rounded bg-brand-accent/10 border border-brand-accent/20">
+                      <span className="font-mono text-[11px] text-zinc-400 font-medium px-2 py-0.5 rounded bg-white/[0.04] border border-white/10 select-none">
                         {section.number}
                       </span>
-                      <h3 className="text-sm font-semibold text-zinc-100 tracking-tight font-body">
+                      <h3 className="text-sm font-medium text-zinc-100 tracking-tight font-body">
                         {section.title}
                       </h3>
                     </div>
 
-                    <div className="pl-0 md:pl-8 space-y-2 text-xs md:text-sm text-zinc-400 leading-relaxed font-body">
-                      {section.content.map((paragraph, pIdx) => (
-                        <p key={pIdx} className={paragraph.startsWith('•') ? 'pl-2 text-zinc-300' : ''}>
-                          {paragraph}
-                        </p>
-                      ))}
+                    <div className="space-y-2 text-xs md:text-sm text-zinc-400 leading-relaxed font-body">
+                      {section.content.map((paragraph, pIdx) => {
+                        const isBullet = paragraph.startsWith('•');
+                        const cleanText = isBullet ? paragraph.replace(/^•\s*/, '') : paragraph;
+
+                        if (isBullet) {
+                          return (
+                            <div key={pIdx} className="flex items-start gap-2.5 pl-3 py-0.5 text-zinc-300">
+                              <span className="w-1 h-1 rounded-full bg-zinc-500 mt-2 shrink-0" />
+                              <span>{cleanText}</span>
+                            </div>
+                          );
+                        }
+
+                        return (
+                          <p key={pIdx} className="text-zinc-400">
+                            {paragraph}
+                          </p>
+                        );
+                      })}
 
                       {/* Interactive contact callout on section 09 */}
                       {section.number === '09' && (
                         <div className="mt-4 pt-2">
                           <a
                             href="mailto:horyzen.app@gmail.com"
-                            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-brand-accent/10 border border-white/10 hover:border-brand-accent/30 text-zinc-200 hover:text-brand-light text-xs font-mono transition-all duration-200 group"
+                            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-zinc-200 hover:text-white text-xs font-mono transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-white/20"
                           >
-                            <Mail className="w-3.5 h-3.5 text-brand-accent group-hover:scale-110 transition-transform" />
+                            <Mail className="w-3.5 h-3.5 text-zinc-400 group-hover:text-white group-hover:scale-110 transition-all" />
                             <span>horyzen.app@gmail.com</span>
-                            <ExternalLink className="w-3 h-3 text-zinc-500 group-hover:text-brand-accent transition-colors ml-1" />
+                            <ExternalLink className="w-3 h-3 text-zinc-500 group-hover:text-zinc-300 transition-colors ml-0.5" />
                           </a>
                         </div>
                       )}
