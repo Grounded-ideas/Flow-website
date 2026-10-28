@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ExternalLink, Mail, ShieldCheck } from 'lucide-react';
+import { X, ExternalLink, Mail, ShieldCheck, FileText } from 'lucide-react';
 
 export type LegalDocType = 'privacy' | 'terms';
 
@@ -235,54 +235,64 @@ export default function LegalModal({ isOpen, type, onClose }: LegalModalProps) {
           {/* Modal Container */}
           <motion.div
             ref={modalRef}
-            initial={{ opacity: 0, scale: 0.95, y: 16, filter: 'blur(8px)' }}
+            initial={{ opacity: 0, scale: 0.96, y: 12, filter: 'blur(6px)' }}
             animate={{ opacity: 1, scale: 1, y: 0, filter: 'blur(0px)' }}
             exit={{ opacity: 0, scale: 0.97, y: 8, filter: 'blur(4px)' }}
             transition={{
               type: "spring",
-              stiffness: 400,
-              damping: 34,
+              stiffness: 420,
+              damping: 32,
               mass: 0.8
             }}
-            className="relative w-full max-w-2xl max-h-[85vh] flex flex-col bg-zinc-950/95 border border-white/10 rounded-2xl shadow-[0_32px_64px_-12px_rgba(0,0,0,0.8)] overflow-hidden z-10"
+            className="relative w-full max-w-2xl max-h-[85vh] flex flex-col bg-zinc-950 border border-white/10 rounded-2xl shadow-[0_32px_64px_-12px_rgba(0,0,0,0.85)] overflow-hidden z-10"
           >
             {/* Subtle top rim specular highlight */}
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none z-30" />
 
             {/* Ultra-Clean Minimalist Sticky Header Bar */}
-            <div className="sticky top-0 z-20 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-zinc-950/90 backdrop-blur-md">
-              <h2 id="legal-modal-title" className="text-base font-medium text-white tracking-tight font-sans">
-                {data.title}
-              </h2>
+            <div className="sticky top-0 z-20 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-zinc-950/85 backdrop-blur-md select-none">
+              <div className="flex items-center gap-2.5">
+                <div className="p-1.5 rounded-lg bg-white/5 border border-white/10 text-zinc-400">
+                  <FileText className="w-4 h-4 text-zinc-300" />
+                </div>
+                <h2 id="legal-modal-title" className="text-sm font-semibold text-zinc-100 tracking-tight font-sans">
+                  {data.title}
+                </h2>
+              </div>
 
               <button
                 onClick={onClose}
                 aria-label="Close modal"
-                className="group flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-accent/50"
+                className="group flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-accent/50 active:scale-95 cursor-pointer"
               >
-                <span>Esc</span>
+                <span className="text-[11px] text-zinc-400 group-hover:text-zinc-200">Esc</span>
                 <X className="w-3.5 h-3.5 text-zinc-400 group-hover:text-white transition-colors" />
               </button>
             </div>
 
-            {/* Scrollable Document Content */}
+            {/* Scrollable Document Content Container */}
             <div className="flex-1 overflow-y-auto px-6 py-6 md:px-8 md:py-8 space-y-8 scrollbar-thin scrollbar-thumb-zinc-800 hover:scrollbar-thumb-zinc-700">
 
               {/* Clean Uncluttered Document Metadata Header */}
-              <div className="space-y-3 pb-6 border-b border-white/5">
+              <div className="space-y-4 pb-6 border-b border-white/10">
                 <div className="flex flex-wrap items-center justify-between gap-3">
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono bg-brand-accent/10 border border-brand-accent/20 text-brand-light">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono bg-brand-accent/10 border border-brand-accent/20 text-brand-light font-medium">
                     <ShieldCheck className="w-3.5 h-3.5 text-brand-accent" />
                     {data.badgeText}
                   </span>
-                  <p className="text-xs font-mono text-zinc-500">
-                    Effective: <span className="text-zinc-300">{data.effectiveDate}</span>
+                  <p className="text-xs font-mono text-zinc-400">
+                    Effective: <span className="text-zinc-200 font-semibold">{data.effectiveDate}</span>
                   </p>
                 </div>
 
-                <p className="text-sm text-zinc-400 leading-relaxed font-body">
-                  {data.subtitle}
-                </p>
+                <div>
+                  <h1 className="text-2xl font-bold text-white tracking-tight font-sans">
+                    {data.title}
+                  </h1>
+                  <p className="mt-1.5 text-sm text-zinc-400 leading-relaxed font-body">
+                    {data.subtitle}
+                  </p>
+                </div>
               </div>
 
               {/* Document Sections */}
@@ -290,7 +300,7 @@ export default function LegalModal({ isOpen, type, onClose }: LegalModalProps) {
                 {data.sections.map((section, idx) => (
                   <div key={idx} className="pt-6 first:pt-0 space-y-3">
                     <div className="flex items-center gap-2.5">
-                      <span className="font-mono text-[11px] text-brand-accent font-semibold px-2 py-0.5 rounded bg-brand-accent/10 border border-brand-accent/20">
+                      <span className="font-mono text-[11px] text-zinc-400 font-medium px-2 py-0.5 rounded bg-white/5 border border-white/10">
                         {section.number}
                       </span>
                       <h3 className="text-sm font-semibold text-zinc-100 tracking-tight font-body">
@@ -298,19 +308,29 @@ export default function LegalModal({ isOpen, type, onClose }: LegalModalProps) {
                       </h3>
                     </div>
 
-                    <div className="pl-0 md:pl-8 space-y-2 text-xs md:text-sm text-zinc-400 leading-relaxed font-body">
-                      {section.content.map((paragraph, pIdx) => (
-                        <p key={pIdx} className={paragraph.startsWith('•') ? 'pl-2 text-zinc-300' : ''}>
-                          {paragraph}
-                        </p>
-                      ))}
+                    <div className="pl-0 sm:pl-7 space-y-2.5 text-xs sm:text-sm text-zinc-400 leading-relaxed font-body">
+                      {section.content.map((paragraph, pIdx) => {
+                        const isBullet = paragraph.startsWith('•');
+                        return (
+                          <p key={pIdx} className={isBullet ? 'flex items-start gap-2 pl-2 text-zinc-300' : 'text-zinc-400'}>
+                            {isBullet ? (
+                              <>
+                                <span className="text-brand-accent font-bold select-none">•</span>
+                                <span>{paragraph.replace(/^•\s*/, '')}</span>
+                              </>
+                            ) : (
+                              paragraph
+                            )}
+                          </p>
+                        );
+                      })}
 
                       {/* Interactive contact callout on section 09 */}
                       {section.number === '09' && (
                         <div className="mt-4 pt-2">
                           <a
                             href="mailto:horyzen.app@gmail.com"
-                            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-brand-accent/10 border border-white/10 hover:border-brand-accent/30 text-zinc-200 hover:text-brand-light text-xs font-mono transition-all duration-200 group"
+                            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-brand-accent/30 text-zinc-200 hover:text-white text-xs font-mono transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-brand-accent/50"
                           >
                             <Mail className="w-3.5 h-3.5 text-brand-accent group-hover:scale-110 transition-transform" />
                             <span>horyzen.app@gmail.com</span>
@@ -325,7 +345,7 @@ export default function LegalModal({ isOpen, type, onClose }: LegalModalProps) {
             </div>
 
             {/* Minimalist Bottom Bar */}
-            <div className="px-6 py-3 md:px-8 border-t border-white/10 bg-zinc-950/90 backdrop-blur-md flex items-center justify-between font-mono text-[11px] text-zinc-500">
+            <div className="px-6 py-3 md:px-8 border-t border-white/10 bg-zinc-950/90 backdrop-blur-md flex items-center justify-between font-mono text-[11px] text-zinc-400 select-none">
               <span>Horyzen Flow Governance</span>
               <span>Updated 2026</span>
             </div>
