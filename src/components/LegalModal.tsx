@@ -185,6 +185,14 @@ const TERMS_DATA: DocumentData = {
 
 export default function LegalModal({ isOpen, type, onClose }: LegalModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
+  const [activeType, setActiveType] = React.useState<LegalDocType>('privacy');
+
+  // Sync activeType with prop changes when modal opens
+  useEffect(() => {
+    if (type) {
+      setActiveType(type);
+    }
+  }, [type, isOpen]);
 
   // Close on Escape key press
   useEffect(() => {
@@ -209,9 +217,9 @@ export default function LegalModal({ isOpen, type, onClose }: LegalModalProps) {
     };
   }, [isOpen]);
 
-  const data = type === 'privacy' ? PRIVACY_DATA : type === 'terms' ? TERMS_DATA : null;
+  const data = activeType === 'privacy' ? PRIVACY_DATA : TERMS_DATA;
 
-  if (!data) return null;
+  if (!isOpen) return null;
 
   return (
     <AnimatePresence>
@@ -250,17 +258,57 @@ export default function LegalModal({ isOpen, type, onClose }: LegalModalProps) {
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
 
             {/* Ultra-Clean Minimalist Sticky Header Bar */}
-            <div className="sticky top-0 z-20 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-zinc-950/90 backdrop-blur-md">
-              <h2 id="legal-modal-title" className="text-base font-medium text-white tracking-tight font-sans">
-                {data.title}
-              </h2>
+            <div className="sticky top-0 z-20 flex items-center justify-between px-5 py-3.5 border-b border-white/10 bg-zinc-950/90 backdrop-blur-md">
+              {/* Document Switcher Tabs */}
+              <div className="flex items-center p-1 rounded-lg bg-zinc-900/80 border border-white/5">
+                <button
+                  type="button"
+                  onClick={() => setActiveType('privacy')}
+                  className={`relative px-3 py-1 rounded-md text-xs font-medium transition-colors duration-150 ${
+                    activeType === 'privacy'
+                      ? 'text-white'
+                      : 'text-zinc-400 hover:text-zinc-200'
+                  }`}
+                >
+                  {activeType === 'privacy' && (
+                    <motion.div
+                      layoutId="activeLegalTab"
+                      className="absolute inset-0 bg-white/10 rounded-md border border-white/10 shadow-xs"
+                      transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                    />
+                  )}
+                  <span className="relative z-10">Privacy Policy</span>
+                </button>
 
+                <button
+                  type="button"
+                  onClick={() => setActiveType('terms')}
+                  className={`relative px-3 py-1 rounded-md text-xs font-medium transition-colors duration-150 ${
+                    activeType === 'terms'
+                      ? 'text-white'
+                      : 'text-zinc-400 hover:text-zinc-200'
+                  }`}
+                >
+                  {activeType === 'terms' && (
+                    <motion.div
+                      layoutId="activeLegalTab"
+                      className="absolute inset-0 bg-white/10 rounded-md border border-white/10 shadow-xs"
+                      transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                    />
+                  )}
+                  <span className="relative z-10">Terms of Service</span>
+                </button>
+              </div>
+
+              {/* Close Button with Keycap ESC Indicator */}
               <button
                 onClick={onClose}
                 aria-label="Close modal"
-                className="group flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-accent/50"
+                className="group flex items-center gap-2 px-2.5 py-1 rounded-lg text-xs font-sans text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-accent/50 cursor-pointer"
               >
-                <span>Esc</span>
+                <kbd className="hidden sm:inline-block font-mono text-[10px] font-semibold text-zinc-300 bg-zinc-900 border border-zinc-700/80 rounded px-1.5 py-0.5 shadow-xs">
+                  ESC
+                </kbd>
                 <X className="w-3.5 h-3.5 text-zinc-400 group-hover:text-white transition-colors" />
               </button>
             </div>
@@ -290,7 +338,7 @@ export default function LegalModal({ isOpen, type, onClose }: LegalModalProps) {
                 {data.sections.map((section, idx) => (
                   <div key={idx} className="pt-6 first:pt-0 space-y-3">
                     <div className="flex items-center gap-2.5">
-                      <span className="font-mono text-[11px] text-brand-accent font-semibold px-2 py-0.5 rounded bg-brand-accent/10 border border-brand-accent/20">
+                      <span className="font-mono text-[11px] text-brand-accent font-semibold px-2 py-0.5 rounded bg-brand-accent/10 border border-brand-accent/20 tracking-wider">
                         {section.number}
                       </span>
                       <h3 className="text-sm font-semibold text-zinc-100 tracking-tight font-body">
@@ -298,23 +346,33 @@ export default function LegalModal({ isOpen, type, onClose }: LegalModalProps) {
                       </h3>
                     </div>
 
-                    <div className="pl-0 md:pl-8 space-y-2 text-xs md:text-sm text-zinc-400 leading-relaxed font-body">
-                      {section.content.map((paragraph, pIdx) => (
-                        <p key={pIdx} className={paragraph.startsWith('•') ? 'pl-2 text-zinc-300' : ''}>
-                          {paragraph}
-                        </p>
-                      ))}
+                    <div className="pl-0 md:pl-8 space-y-2.5 text-xs md:text-sm text-zinc-400 leading-relaxed font-body">
+                      {section.content.map((paragraph, pIdx) => {
+                        if (paragraph.startsWith('•')) {
+                          return (
+                            <div key={pIdx} className="flex items-start gap-2 pl-2 text-zinc-300">
+                              <span className="w-1.5 h-1.5 rounded-full bg-brand-accent/60 mt-1.5 shrink-0" />
+                              <span>{paragraph.slice(1).trim()}</span>
+                            </div>
+                          );
+                        }
+                        return (
+                          <p key={pIdx} className="text-zinc-400">
+                            {paragraph}
+                          </p>
+                        );
+                      })}
 
                       {/* Interactive contact callout on section 09 */}
                       {section.number === '09' && (
                         <div className="mt-4 pt-2">
                           <a
                             href="mailto:horyzen.app@gmail.com"
-                            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-brand-accent/10 border border-white/10 hover:border-brand-accent/30 text-zinc-200 hover:text-brand-light text-xs font-mono transition-all duration-200 group"
+                            className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-brand-accent/10 border border-white/10 hover:border-brand-accent/30 text-zinc-200 hover:text-brand-light text-xs font-mono transition-all duration-200 group"
                           >
                             <Mail className="w-3.5 h-3.5 text-brand-accent group-hover:scale-110 transition-transform" />
                             <span>horyzen.app@gmail.com</span>
-                            <ExternalLink className="w-3 h-3 text-zinc-500 group-hover:text-brand-accent transition-colors ml-1" />
+                            <ExternalLink className="w-3 h-3 text-zinc-500 group-hover:text-brand-accent transition-colors ml-0.5" />
                           </a>
                         </div>
                       )}
