@@ -9,8 +9,8 @@
   --color-brand-dark: #1e3d3b;
   --color-brand-light: #cce2e1;
   --color-brand-accent: #478e8a;
-  
-  /* Override blue with brand accent for consistency if needed, 
+
+  /* Override blue with brand accent for consistency if needed,
      but we'll use brand classes specifically */
 }
 
@@ -41,4 +41,22 @@
 .stats-number {
   font-family: var(--font-mono);
   font-weight: 700;
+}
+
+.template-preview-summary::-webkit-details-marker {
+  display: none;
+}
+
+.template-preview-chevron {
+  transition: transform 160ms ease;
+}
+
+details[open] .template-preview-chevron {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .template-preview-chevron {
+    transition: none;
+  }
 }
