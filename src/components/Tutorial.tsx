@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { markdown } from '@codemirror/lang-markdown';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion, MotionConfig } from 'framer-motion';
 import { 
   ChevronRight, 
   ChevronLeft, 
@@ -27,14 +27,31 @@ interface Step {
   action?: () => void;
 }
 
+const INITIAL_SAMPLE_VALUE = '# Welcome to Flow\n\nYou\'re looking at a live demo of Flow. This editor works exactly like the real app. Go ahead — type something.';
+
 export default function Tutorial() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [editorValue, setEditorValue] = useState('# Welcome to Flow\n\nYou\'re looking at a live demo of Flow. This editor works exactly like the real app. Go ahead — type something.');
+  const [editorValue, setEditorValue] = useState(INITIAL_SAMPLE_VALUE);
   const [isTypewriterMode, setIsTypewriterMode] = useState(false);
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [showGraph, setShowGraph] = useState(false);
   const [showFiles, setShowFiles] = useState(false);
+
+  const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    const handlePageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) {
+        setEditorValue(INITIAL_SAMPLE_VALUE);
+      }
+    };
+
+    window.addEventListener('pageshow', handlePageShow);
+    return () => {
+      window.removeEventListener('pageshow', handlePageShow);
+    };
+  }, []);
 
   const steps: Step[] = [
     {
@@ -88,18 +105,20 @@ export default function Tutorial() {
   const pageTitle = editorValue.split('\n')[0].replace(/^#\s*/, '') || 'Untitled';
 
   return (
-    <section id="tutorial" className="py-24 bg-black overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row gap-8 h-[700px]">
+    <MotionConfig reducedMotion="user">
+      <section id="tutorial" className="py-24 bg-black overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col lg:flex-row gap-8 min-h-[500px] lg:h-[700px]">
           
           {/* Left Panel: Instructions */}
-          <div className="lg:w-[30%] flex flex-col justify-between bg-zinc-900/50 border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
+          <div className="lg:w-[30%] flex flex-col justify-between bg-zinc-900/50 border border-white/10 rounded-3xl p-6 sm:p-8 backdrop-blur-sm">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
+                initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: -20 }}
+                animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, x: 0 }}
+                exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: 20 }}
+                transition={{ duration: shouldReduceMotion ? 0.01 : 0.3 }}
                 className="space-y-6"
               >
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-accent/10 border border-brand-accent/20 text-brand-accent text-xs font-medium font-mono">
@@ -159,7 +178,7 @@ export default function Tutorial() {
 
           {/* Right Panel: Editor */}
           <div className={cn(
-            "lg:w-[70%] relative bg-zinc-900 border border-white/10 rounded-3xl overflow-hidden transition-all duration-500",
+            "lg:w-[70%] relative bg-zinc-900 border border-white/10 rounded-3xl overflow-hidden transition-all duration-500 focus-within:border-brand-accent/50 focus-within:ring-1 focus-within:ring-brand-accent/50 flex flex-col min-h-[400px] lg:min-h-0",
             isFocusMode && "lg:w-full lg:fixed lg:inset-0 lg:z-50 lg:rounded-none lg:border-none"
           )}>
             {/* Editor Header */}
@@ -189,12 +208,12 @@ export default function Tutorial() {
 
             {/* Editor Content */}
             <div className={cn(
-              "h-full flex",
+              "flex-1 flex",
               isFocusMode && "justify-center"
             )}>
               {/* Sidebar Mock */}
               {!isFocusMode && (
-                <div className="w-64 border-r border-white/5 p-4 flex flex-col gap-4 bg-zinc-900/50">
+                <div className="hidden md:flex w-64 shrink-0 border-r border-white/5 p-4 flex-col gap-4 bg-zinc-900/50">
                   <div className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest font-mono">Documents</div>
                   <div className="space-y-1">
                     <div className="px-3 py-2 rounded-lg bg-brand-accent/10 text-brand-accent text-sm flex items-center gap-2 font-mono">
@@ -216,7 +235,7 @@ export default function Tutorial() {
               {/* Main Editor Area */}
               <div className={cn(
                 "flex-1 relative",
-                isFocusMode ? "max-w-3xl w-full py-24" : "p-8"
+                isFocusMode ? "max-w-3xl w-full py-12 sm:py-24" : "p-4 sm:p-8"
               )}>
                 <CodeMirror
                   value={editorValue}
@@ -239,10 +258,11 @@ export default function Tutorial() {
                 <AnimatePresence>
                   {showAnalytics && (
                     <motion.div
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] bg-zinc-900 border border-white/10 rounded-3xl p-8 shadow-2xl z-20"
+                      initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95 }}
+                      animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
+                      exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95 }}
+                      transition={{ duration: shouldReduceMotion ? 0.01 : 0.2 }}
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] sm:w-[400px] max-w-full bg-zinc-900 border border-white/10 rounded-3xl p-6 sm:p-8 shadow-2xl z-20"
                     >
                       <div className="flex items-center justify-between mb-6">
                         <h4 className="text-lg font-bold text-white font-heading">Writing Analytics</h4>
@@ -277,9 +297,10 @@ export default function Tutorial() {
 
                   {showGraph && (
                     <motion.div
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
+                      initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95 }}
+                      animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
+                      exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95 }}
+                      transition={{ duration: shouldReduceMotion ? 0.01 : 0.2 }}
                       className="absolute inset-0 bg-zinc-900/95 backdrop-blur-sm z-20 flex items-center justify-center"
                     >
                       <div className="relative w-full h-full p-12">
@@ -305,10 +326,11 @@ export default function Tutorial() {
 
                   {showFiles && (
                     <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 20 }}
-                      className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[500px] bg-zinc-900 border border-white/10 rounded-2xl p-6 shadow-2xl z-20"
+                      initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
+                      animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                      exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
+                      transition={{ duration: shouldReduceMotion ? 0.01 : 0.2 }}
+                      className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] sm:w-[500px] max-w-full bg-zinc-900 border border-white/10 rounded-2xl p-6 shadow-2xl z-20"
                     >
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-2 text-zinc-400 text-sm font-mono">
@@ -358,5 +380,6 @@ export default function Tutorial() {
         }
       `}</style>
     </section>
+    </MotionConfig>
   );
 }
