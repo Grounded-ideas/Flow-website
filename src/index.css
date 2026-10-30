@@ -38,6 +38,11 @@
   line-height: 1.6;
 }
 
+.tutorial-editor .cm-editor.cm-focused,
+.tutorial-editor .cm-editor:focus-within {
+  outline: none !important;
+}
+
 .stats-number {
   font-family: var(--font-mono);
   font-weight: 700;
