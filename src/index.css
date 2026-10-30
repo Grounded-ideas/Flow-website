@@ -42,3 +42,25 @@
   font-family: var(--font-mono);
   font-weight: 700;
 }
+
+.template-preview-summary::-webkit-details-marker,
+.smartscreen-summary::-webkit-details-marker {
+  display: none;
+}
+
+.template-preview-chevron,
+.smartscreen-chevron {
+  transition: transform 160ms ease;
+}
+
+details[open] .template-preview-chevron,
+details[open] .smartscreen-chevron {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .template-preview-chevron,
+  .smartscreen-chevron {
+    transition: none;
+  }
+}

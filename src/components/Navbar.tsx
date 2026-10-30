@@ -57,7 +57,10 @@ export default function Navbar() {
             : "bg-transparent border-transparent"
         )}>
           {/* Logo */}
-          <a href="#" className="flex items-center gap-3 text-xl font-bold text-white group">
+          <a
+            href="#"
+            className="flex items-center gap-3 text-xl font-bold text-white group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 rounded-lg p-1 transition-all"
+          >
             <img 
               src={flowLogo}
               alt="Flow Logo"
@@ -73,7 +76,7 @@ export default function Navbar() {
               <a 
                 key={link.name} 
                 href={link.href}
-                className="text-sm font-medium text-zinc-400 hover:text-white transition-colors font-body"
+                className="text-sm font-medium text-zinc-400 hover:text-white focus-visible:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 rounded-md px-2 py-1 transition-colors font-body"
               >
                 {link.name}
               </a>
@@ -82,7 +85,10 @@ export default function Navbar() {
 
           {/* CTA */}
           <div className="hidden md:flex items-center gap-4">
-            <button onClick={handleDownloadClick} className="px-5 py-2.5 rounded-full bg-white text-black text-sm font-bold hover:bg-brand-light transition-all flex items-center gap-2 font-body">
+            <button
+              onClick={handleDownloadClick}
+              className="px-5 py-2.5 rounded-full bg-white text-black text-sm font-bold hover:bg-brand-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 transition-all flex items-center gap-2 font-body"
+            >
               <Download className="w-4 h-4" />
               Download
             </button>
@@ -90,7 +96,11 @@ export default function Navbar() {
 
           {/* Mobile Menu Toggle */}
           <button 
-            className="md:hidden p-2 text-zinc-400 hover:text-white transition-colors"
+            type="button"
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-menu"
+            className="md:hidden p-2 text-zinc-400 hover:text-white focus-visible:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 rounded-lg transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -101,6 +111,7 @@ export default function Navbar() {
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
+              id="mobile-menu"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -110,14 +121,17 @@ export default function Navbar() {
                 <a 
                   key={link.name} 
                   href={link.href}
-                  className="text-lg font-medium text-zinc-400 hover:text-white transition-colors"
+                  className="text-lg font-medium text-zinc-400 hover:text-white focus-visible:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 rounded-md px-2 py-1 transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {link.name}
                 </a>
               ))}
               <div className="h-px w-full bg-white/5" />
-              <button onClick={() => { handleDownloadClick(); setIsMobileMenuOpen(false); }} className="w-full px-6 py-4 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-500 transition-all flex items-center justify-center gap-2">
+              <button
+                onClick={() => { handleDownloadClick(); setIsMobileMenuOpen(false); }}
+                className="w-full px-6 py-4 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 transition-all flex items-center justify-center gap-2"
+              >
                 <Download className="w-5 h-5" />
                 Download for Windows
               </button>

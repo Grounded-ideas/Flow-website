@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Download as DownloadIcon, Github, Terminal, Shield } from 'lucide-react';
+import { Download as DownloadIcon, Github, Terminal, Shield, ChevronDown } from 'lucide-react';
 import ReactGA from 'react-ga4';
 
 export default function Download() {
@@ -61,18 +61,41 @@ export default function Download() {
           <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-6">
             <button 
               onClick={handleDownloadClick} 
-              className="w-full sm:w-auto px-12 py-6 rounded-full bg-white text-black font-bold hover:bg-brand-light transition-all flex items-center justify-center gap-3 group shadow-2xl font-body"
+              className="w-full sm:w-auto px-12 py-6 rounded-full bg-white text-black font-bold hover:bg-brand-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 transition-all flex items-center justify-center gap-3 group shadow-2xl font-body"
             >
               <DownloadIcon className="w-6 h-6 group-hover:translate-y-1 transition-transform" />
               Download Flow for Windows
             </button>
             <button 
               onClick={handleGitHubClick}
-              className="w-full sm:w-auto px-12 py-6 rounded-full bg-white/5 border border-white/10 text-white font-bold hover:bg-white/10 transition-all flex items-center justify-center gap-3 group font-body"
+              className="w-full sm:w-auto px-12 py-6 rounded-full bg-white/5 border border-white/10 text-white font-bold hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 transition-all flex items-center justify-center gap-3 group font-body"
             >
               <Github className="w-6 h-6" />
               View on GitHub
             </button>
+          </div>
+
+          {/* SmartScreen Security Disclosure */}
+          <div className="relative z-10 max-w-2xl mx-auto pt-6 text-left">
+            <details className="bg-zinc-800/50 border border-white/10 rounded-2xl overflow-hidden group">
+              <summary className="smartscreen-summary cursor-pointer p-5 flex items-center justify-between text-sm font-medium text-zinc-300 hover:text-white transition-colors list-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 rounded-2xl">
+                <span className="flex items-center gap-3 font-mono">
+                  <Shield className="w-5 h-5 text-yellow-500 shrink-0" />
+                  <span>SmartScreen & Installation Guide</span>
+                </span>
+                <ChevronDown className="w-5 h-5 text-zinc-400 smartscreen-chevron shrink-0" aria-hidden="true" />
+              </summary>
+              <div className="px-5 pb-5 pt-2 text-sm text-zinc-400 space-y-3 font-body border-t border-white/5">
+                <p className="leading-relaxed">
+                  Microsoft Defender SmartScreen may prevent unrecognized apps from starting automatically. <strong className="text-white">Flow is safe to run.</strong> This warning appears because the app is newly released.
+                </p>
+                <div className="bg-black/40 rounded-xl p-4 font-mono text-xs text-zinc-300 space-y-1">
+                  <div>1. Click <span className="text-yellow-400">"More info"</span></div>
+                  <div>2. Click <span className="text-yellow-400">"Run anyway"</span></div>
+                  <div>3. Flow will install normally</div>
+                </div>
+              </div>
+            </details>
           </div>
 
           <div className="relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-8 pt-12 border-t border-white/5 max-w-4xl mx-auto">
@@ -119,13 +142,17 @@ export default function Download() {
                 <strong className="text-white">Flow is safe to run.</strong> This warning appears because the app is new.
               </p>
               
-              <div className="bg-zinc-800 rounded-lg p-4 mb-6">
-                <p className="text-sm text-zinc-300 font-mono">
-                  1. Click <span className="text-yellow-400">"More info"</span><br />
-                  2. Click <span className="text-yellow-400">"Run anyway"</span><br />
-                  3. Flow will install normally
-                </p>
-              </div>
+              <details className="bg-zinc-800/80 border border-white/10 rounded-xl overflow-hidden mb-6 group text-left" open>
+                <summary className="smartscreen-summary cursor-pointer p-4 flex items-center justify-between text-sm font-medium text-zinc-200 hover:text-white transition-colors list-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent rounded-xl">
+                  <span className="font-mono text-xs text-zinc-300 uppercase tracking-wider">Installation Instructions</span>
+                  <ChevronDown className="w-4 h-4 text-zinc-400 smartscreen-chevron shrink-0" aria-hidden="true" />
+                </summary>
+                <div className="p-4 pt-2 text-sm text-zinc-300 font-mono space-y-1 border-t border-white/5">
+                  <div>1. Click <span className="text-yellow-400">"More info"</span></div>
+                  <div>2. Click <span className="text-yellow-400">"Run anyway"</span></div>
+                  <div>3. Flow will install normally</div>
+                </div>
+              </details>
               
               <div className="flex gap-3">
                 <button
