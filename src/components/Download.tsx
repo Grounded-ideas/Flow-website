@@ -1,19 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Download as DownloadIcon, Github, Terminal, Shield } from 'lucide-react';
+import { Download as DownloadIcon, ExternalLink, Github, ShieldAlert, Terminal } from 'lucide-react';
 import ReactGA from 'react-ga4';
 
-export default function Download() {
-  const [showWarning, setShowWarning] = useState(false);
-  
-  // Direct download link for the MSI installer
-  const downloadLink = 'https://github.com/Grounded-ideas/Horyzen-Flow-download/releases/download/v0.1.3/Flow_0.1.3_x64_en-US.msi';
-  const githubRepoLink = 'https://github.com/Grounded-ideas/Horyzen-Flow-download';
+const downloadLink = 'https://github.com/Grounded-ideas/Horyzen-Flow-download/releases/download/v0.1.3/Flow_0.1.3_x64_en-US.msi';
+const releaseLink = 'https://github.com/Grounded-ideas/Horyzen-Flow-download/releases/tag/v0.1.3';
+const githubRepoLink = 'https://github.com/Grounded-ideas/Horyzen-Flow-download';
 
+export default function Download() {
   const handleDownloadClick = () => {
-    // Show warning popup first
-    setShowWarning(true);
-    
+    // Retain the existing measurement event; it records a CTA click, not a confirmed install.
     ReactGA.event({
       category: 'engagement',
       action: 'Downloaded App',
@@ -21,21 +17,12 @@ export default function Download() {
     });
   };
 
-  const proceedWithDownload = () => {
-    setShowWarning(false);
-    window.open(downloadLink, '_blank');
-  };
-
-  const cancelDownload = () => {
-    setShowWarning(false);
-  };
-
   const handleGitHubClick = () => {
     ReactGA.event({
       category: 'engagement',
       action: 'View GitHub',
     });
-    window.open(githubRepoLink, '_blank');
+    window.open(githubRepoLink, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -59,40 +46,72 @@ export default function Download() {
           </div>
 
           <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-6">
-            <button 
-              onClick={handleDownloadClick} 
-              className="w-full sm:w-auto px-12 py-6 rounded-full bg-white text-black font-bold hover:bg-brand-light transition-all flex items-center justify-center gap-3 group shadow-2xl font-body"
+            <a
+              href={downloadLink}
+              onClick={handleDownloadClick}
+              className="w-full sm:w-auto px-12 py-6 rounded-full bg-white text-black font-bold hover:bg-brand-light transition-all flex items-center justify-center gap-3 group shadow-2xl font-body focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-4 focus-visible:ring-offset-zinc-900"
             >
-              <DownloadIcon className="w-6 h-6 group-hover:translate-y-1 transition-transform" />
+              <DownloadIcon aria-hidden="true" className="w-6 h-6 group-hover:translate-y-1 transition-transform" />
               Download Flow for Windows
-            </button>
-            <button 
+            </a>
+            <button
+              type="button"
               onClick={handleGitHubClick}
-              className="w-full sm:w-auto px-12 py-6 rounded-full bg-white/5 border border-white/10 text-white font-bold hover:bg-white/10 transition-all flex items-center justify-center gap-3 group font-body"
+              className="w-full sm:w-auto px-12 py-6 rounded-full bg-white/5 border border-white/10 text-white font-bold hover:bg-white/10 transition-all flex items-center justify-center gap-3 group font-body focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-4 focus-visible:ring-offset-zinc-900"
             >
-              <Github className="w-6 h-6" />
+              <Github aria-hidden="true" className="w-6 h-6" />
               View on GitHub
             </button>
           </div>
 
+          <details className="relative z-10 max-w-3xl mx-auto rounded-2xl bg-black/30 border border-white/10 text-left">
+            <summary className="flex cursor-pointer list-none items-center gap-3 p-5 text-left rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900">
+              <ShieldAlert aria-hidden="true" className="w-5 h-5 shrink-0 text-brand-light" />
+              <span className="flex-1 text-sm sm:text-base font-semibold text-zinc-200 font-body">
+                About Windows security prompts
+              </span>
+              <span className="text-xs text-zinc-500 font-mono">Optional</span>
+            </summary>
+            <div className="px-5 pb-5 space-y-3 text-sm text-zinc-400 leading-relaxed font-body">
+              <p>
+                Windows SmartScreen may warn when it has limited reputation information about a file or its publisher. A warning is a caution signal; it does not prove that an app is safe or malicious.
+              </p>
+              <p>
+                The installer is hosted on Flow’s linked GitHub release. Its release page lists a SHA-256 digest you can use to check that your file matches the published asset. A matching digest does not verify the publisher or prove the software is safe.
+              </p>
+              <p>
+                If you are unsure about the source or publisher, cancel rather than bypassing a security warning. This website does not independently certify the installer.
+              </p>
+              <a
+                href={releaseLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-brand-light hover:text-white underline decoration-white/30 underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent rounded-sm"
+              >
+                View the v0.1.3 release and its file digest
+                <ExternalLink aria-hidden="true" className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </details>
+
           <div className="relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-8 pt-12 border-t border-white/5 max-w-4xl mx-auto">
             <div className="space-y-2">
               <div className="flex items-center justify-center gap-2 text-zinc-500 font-bold uppercase tracking-widest text-xs font-mono">
-                <Terminal className="w-4 h-4" />
+                <Terminal aria-hidden="true" className="w-4 h-4" />
                 Requirements
               </div>
               <div className="text-sm text-white font-medium font-mono">Windows 10 or 11, 64-bit</div>
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-center gap-2 text-zinc-500 font-bold uppercase tracking-widest text-xs font-mono">
-                <DownloadIcon className="w-4 h-4" />
+                <DownloadIcon aria-hidden="true" className="w-4 h-4" />
                 File Size
               </div>
               <div className="text-sm text-white font-medium font-mono">~5MB Installer</div>
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-center gap-2 text-zinc-500 font-bold uppercase tracking-widest text-xs font-mono">
-                <Terminal className="w-4 h-4" />
+                <Terminal aria-hidden="true" className="w-4 h-4" />
                 Version
               </div>
               <div className="text-sm text-white font-medium font-mono">v0.1.3</div>
@@ -100,51 +119,6 @@ export default function Download() {
           </div>
         </div>
       </div>
-
-      {/* Windows Security Warning Modal */}
-      {showWarning && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 backdrop-blur-sm">
-          <div className="max-w-md w-full mx-4 bg-zinc-900 border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
-            <div className="p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center">
-                  <Shield className="w-6 h-6 text-yellow-500" />
-                </div>
-                <h3 className="text-xl font-bold text-white">Windows Protected Your PC</h3>
-              </div>
-              
-              <p className="text-zinc-400 mb-4 leading-relaxed">
-                Microsoft Defender SmartScreen prevented an unrecognized app from starting.
-                <br /><br />
-                <strong className="text-white">Flow is safe to run.</strong> This warning appears because the app is new.
-              </p>
-              
-              <div className="bg-zinc-800 rounded-lg p-4 mb-6">
-                <p className="text-sm text-zinc-300 font-mono">
-                  1. Click <span className="text-yellow-400">"More info"</span><br />
-                  2. Click <span className="text-yellow-400">"Run anyway"</span><br />
-                  3. Flow will install normally
-                </p>
-              </div>
-              
-              <div className="flex gap-3">
-                <button
-                  onClick={proceedWithDownload}
-                  className="flex-1 px-4 py-2 rounded-lg bg-white text-black font-bold hover:bg-zinc-200 transition-colors"
-                >
-                  I understand, download anyway
-                </button>
-                <button
-                  onClick={cancelDownload}
-                  className="px-4 py-2 rounded-lg bg-zinc-800 text-zinc-400 font-bold hover:bg-zinc-700 transition-colors"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 }
